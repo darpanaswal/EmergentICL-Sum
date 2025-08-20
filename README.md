@@ -159,5 +159,3 @@ Contributions, issues, and feature requests are welcome\!
 ## 📞 Contact
 
 Darpan Aswal - darpan.aswal@universite-paris-saclay.fr
-```
-```
