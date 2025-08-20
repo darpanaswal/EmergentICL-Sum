@@ -139,19 +139,6 @@ python main.py --model [MODEL_NAME] --experiment [EXPERIMENT_TYPE] --finetune_ty
 
 The results of the experiments are saved to `rouge_results.csv`. The paper's findings indicate that while fine-tuning significantly improves the performance of `mT5` and `mBART50`, they do not benefit from in-context learning. In contrast, `GPT-4o-mini` shows strong zero-shot performance and benefits from one-shot prompting, suggesting that in-context learning is an emergent property of modern large language models.
 
-## ✍️ Citation
-
-If you use this code or find the research useful, please cite the paper:
-
-```bibtex
-@article{aswal2025crosslingual,
-  title={Exploring Cross Lingual Transfer Learning Techniques for Abstractive Text Summarization},
-  author={Aswal, Darpan},
-  journal={Preprint},
-  year={2025}
-}
-```
-
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome\!
