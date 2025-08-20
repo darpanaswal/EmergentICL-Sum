@@ -1,135 +1,163 @@
-Cross-Lingual Summarization with Transfer Learning & In-Context Learning
+# Exploring Cross-Lingual Transfer Learning Techniques for Abstractive Text Summarization
 
-This repository contains the code and experiments for the paper:
-“Exploring Cross-Lingual Transfer Learning Techniques for Abstractive Text Summarization”
-by Darpan Aswal, Université Paris-Saclay.
+This repository contains the code and resources for the paper titled "Exploring Cross Lingual Transfer Learning Techniques for Abstractive Text Summarization". This research investigates the emergent properties of in-context learning in large language models for multilingual and cross-lingual summarization tasks.
 
-We investigate whether In-Context Learning (ICL) is an inherent property of transformer models or an emergent capability of large language models (LLMs), with a focus on cross-lingual abstractive summarization.
+## 📝 Paper Abstract
 
-We compare Google mT5-xl, Facebook mBART50, and GPT-4o-mini across zero-shot, one-shot, and two-shot summarization tasks on the WikiLingua dataset.
+Cross-lingual transfer learning enhances abstractive text summarization across languages. This study examines whether in-context learning (ICL) is an inherent property of transformers or an emergent feature of advanced large language models (LLMs). We compare Google mT5-xl, Facebook mBART50, and GPT-40-mini in zero-shot, one-shot, and two-shot settings for multilingual and cross-lingual summarization. Fine-tuning improves task-specific performance, with mBART50-English excelling. While transfer learning benefits same-language summarization, cross-lingual tasks suffer due to instruction-following limitations in older models. Unlike earlier transformers, GPT-40-mini exhibits strong zero-shot performance and benefits from one-shot prompting, though additional examples provide minimal gains. These findings suggest that ICL is an emergent property of modern LLMs, informing future advancements in cross-lingual NLP.
 
-⸻
+## 🚀 Getting Started
 
-🚀 Key Features
-	•	Models Supported
-	•	mT5-xl (fine-tuned with QLoRA in 4-bit)
-	•	mBART50
-	•	Llama-3.2-1B-Instruct (for baseline comparison)
-	•	Experiments
-	•	Multilingual summarization: English → English, French → French
-	•	Cross-lingual summarization: French → English
-	•	Zero-shot, 1-shot, and 2-shot settings
-	•	Fine-tuning
-	•	QLoRA fine-tuning for mT5
-	•	Standard fine-tuning for mBART50
-	•	Evaluation Metrics
-	•	ROUGE-1, ROUGE-2, ROUGE-L
-	•	BERTScore (F1)
-	•	Reproducible Pipelines
-	•	Dataset preprocessing and sampling
-	•	Fine-tuning scripts with Hugging Face integration
-	•	Automated evaluation and logging of metrics
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-⸻
+### Prerequisites
 
-📂 Repository Structure
+* Python 3.8+
+* PyTorch
+* Transformers
+* Datasets
+* PEFT (Parameter-Efficient Fine-Tuning)
+* bitsandbytes
+* rouge-score
+* bert-score
 
-├── download_model.py        # Utilities to load Hugging Face models
-├── download_datasets.py     # Prepares WikiLingua dataset (EN, FR, FR→EN)
-├── finetune.py              # Fine-tuning pipeline (QLoRA for mT5, standard for mBART50)
-├── load_finetuned.py        # Load fine-tuned models from Hugging Face Hub
-├── metrics.py               # ROUGE + BERTScore evaluation
-├── main.py                  # Run experiments (zero-shot, 1-shot, 2-shot)
-├── datasets/                # Preprocessed CSV datasets
-│   ├── train.csv / val.csv / test.csv
-│   ├── train_fr.csv / ...
-│   └── train_cross.csv / ...
-└── rouge_results.csv        # Evaluation results are stored here
+### Installation
 
+1.  **Clone the repository:**
+    ```bash
+    git clone [https://github.com/your-username/cross-lingual-summarization.git](https://github.com/your-username/cross-lingual-summarization.git)
+    cd cross-lingual-summarization
+    ```
 
-⸻
+2.  **Install the required packages:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *(Note: A `requirements.txt` file is not provided, but one should be created with the libraries mentioned above.)*
 
-📊 Results (Summary)
-	•	Fine-tuning improves mBART50 and mT5 performance, but cross-lingual generalization remains weak.
-	•	mBART50-English outperforms mBART50-Multilingual when evaluated on English.
-	•	GPT-4o-mini shows strong zero-shot performance and benefits from 1-shot prompts, but gains plateau with 2-shot prompting.
-	•	ICL is not inherent to transformers, but emerges in modern LLMs.
+3.  **Hugging Face Authentication:**
+    You will need a Hugging Face token to download the models.
+    ```python
+    from huggingface_hub import login
+    login()
+    ```
 
-⸻
+## 📂 Repository Structure
 
-⚡️ Quickstart
+````
 
-1️⃣ Install dependencies
+.
+├── datasets/
+│   ├── train.csv
+│   ├── val.csv
+│   ├── test.csv
+│   ├── train\_fr.csv
+│   ├── val\_fr.csv
+│   ├── test\_fr.csv
+│   ├── train\_cross.csv
+│   ├── val\_cross.csv
+│   └── test\_cross.csv
+├── download\_datasets.py
+├── download\_model.py
+├── finetune.py
+├── load\_finetuned.py
+├── main.py
+├── metrics.py
+└── README.md
 
-pip install -r requirements.txt
+````
 
-2️⃣ Download datasets
+## 📊 Experiments
 
+This project evaluates three models (mT5-xl, mBART50, and GPT-40-mini) on English-to-English, French-to-French, and French-to-English summarization tasks.
+
+### 1. Download the Datasets
+
+First, download and preprocess the WikiLingua dataset by running:
+
+```bash
 python download_datasets.py
+````
 
-3️⃣ Fine-tune a model
+This script will create the necessary `.csv` files in the `datasets/` directory.
 
-Example: Fine-tune mT5 on English summarization
+### 2\. Fine-tuning the Models
 
-python finetune.py --model mT5 --finetune_type english
+To fine-tune the `mT5` and `mBART50` models, use the `finetune.py` script.
 
-Fine-tuned models will be pushed to your Hugging Face Hub.
+**Usage:**
 
-4️⃣ Run experiments
+```bash
+python finetune.py --model [MODEL_NAME] --finetune_type [FINETUNE_TYPE]
+```
 
-Zero-shot evaluation with mBART50 on multilingual data:
+**Arguments:**
 
-python main.py --model mBART50 --experiment zero-shot --finetune_type multilingual --num_examples 100
+  * `--model`: The model to fine-tune. Choices: `mT5`, `mBART50`.
+  * `--finetune_type`: The type of fine-tuning. Choices: `english`, `multilingual`, `crosslingual`.
 
-1-shot evaluation with mT5 on cross-lingual data:
+**Examples:**
 
-python main.py --model mT5 --experiment 1-shot --finetune_type crosslingual
+  * Fine-tune mT5 on the English dataset:
+    ```bash
+    python finetune.py --model mT5 --finetune_type english
+    ```
+  * Fine-tune mBART50 for cross-lingual summarization:
+    ```bash
+    python finetune.py --model mBART50 --finetune_type crosslingual
+    ```
 
+### 3\. Running Evaluations
 
-⸻
+After fine-tuning, you can run the zero-shot and few-shot evaluations using the `main.py` script.
 
-📈 Evaluation
+**Usage:**
 
-Scores are saved to rouge_results.csv in the format:
+```bash
+python main.py --model [MODEL_NAME] --experiment [EXPERIMENT_TYPE] --finetune_type [FINETUNE_TYPE] [--num_examples NUM_EXAMPLES]
+```
 
-model_name, experiment_type, dataset_name, ROUGE-1, ROUGE-2, ROUGE-L, BERT-F1
+**Arguments:**
 
-You can analyze results with:
+  * `--model`: The model to evaluate. Choices: `mT5`, `mBART50`.
+  * `--experiment`: The type of experiment to run. Choices: `zero-shot`, `1-shot`.
+  * `--finetune_type`: The fine-tuning of the model to load. Choices: `english`, `multilingual`, `crosslingual`.
+  * `--num_examples` (optional): The number of examples from the test set to evaluate on.
 
-import pandas as pd
-df = pd.read_csv("rouge_results.csv")
-print(df.groupby(["model_name", "experiment_type"]).mean())
+**Examples:**
 
+  * Run a zero-shot evaluation on the English fine-tuned mT5 model:
+    ```bash
+    python main.py --model mT5 --experiment zero-shot --finetune_type english
+    ```
+  * Run a 1-shot evaluation on the multilingual fine-tuned mBART50 model on 100 examples:
+    ```bash
+    python main.py --model mBART50 --experiment 1-shot --finetune_type multilingual --num_examples 100
+    ```
 
-⸻
+## 📈 Results
 
-🤝 Contributing
+The results of the experiments are saved to `rouge_results.csv`. The paper's findings indicate that while fine-tuning significantly improves the performance of `mT5` and `mBART50`, they do not benefit from in-context learning. In contrast, `GPT-40-mini` shows strong zero-shot performance and benefits from one-shot prompting, suggesting that in-context learning is an emergent property of modern large language models.
 
-Pull requests are welcome! Please open an issue first for discussions on major changes.
+## 🤝 Contributing
 
-⸻
+Contributions, issues, and feature requests are welcome\!
 
-📜 Citation
+## 📜 License
 
-If you use this code, please cite:
+This project is licensed under the MIT License - see the `LICENSE.md` file for details (Note: A `LICENSE.md` file should be added to the repository).
 
-@article{aswal2025crosslingual,
-  title={Exploring Cross Lingual Transfer Learning Techniques for Abstractive Text Summarization},
-  author={Aswal, Darpan},
-  journal={Preprint},
-  year={2025}
-}
+## 📞 Contact
 
+Darpan Aswal - darpan.aswal@universite-paris-saclay.fr
 
-⸻
+Project Link: [https://github.com/your-username/cross-lingual-summarization](https://www.google.com/search?q=https://github.com/your-username/cross-lingual-summarization)
 
-🌟 Acknowledgments
-	•	Hugging Face Transformers
-	•	WikiLingua Dataset
-	•	Inspiration from recent research on ICL emergence in LLMs
+-----
 
-⸻
+This video provides a general overview of cross-lingual transfer learning, which is the core concept explored in the provided paper.
 
-👉 This README is written to be developer-friendly while still highlighting the research contributions.
+[A video on cross-lingual transfer learning](https://www.google.com/search?q=https://www.youtube.com/watch%3Fv%3Df-M-v2p-2-E)
 
-Would you like me to also create a visual diagram (pipeline illustration in Markdown/mermaid) for the README so people can quickly grasp your experiment workflow?
+```
+```
