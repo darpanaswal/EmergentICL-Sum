@@ -1,0 +1,12 @@
+peft
+numpy
+torch
+pandas
+seaborn
+datasets 
+bert_score
+matplotlib
+accelerate 
+rouge_score
+bitsandbytes 
+transformers
